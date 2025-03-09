@@ -4,7 +4,7 @@
 
 ## Índice de Laboratorios
 
-1.  **[Descubrimiento de ID de Cuenta a través de Aplicación Web](lab1-account-id-discovery/README.md)**:
+1.  **[Descubrimiento de ID de Cuenta a través de Aplicación Web](lab1/README.md)**:
     * Explotación de configuraciones inseguras en aplicaciones web y buckets S3 públicos para obtener el ID de la cuenta.
 2.  **[Enumeración de Usuarios IAM](lab2-iam-enumeration/README.md)**:
     * Técnicas para enumerar usuarios y roles de IAM y comprender la estructura de permisos.
