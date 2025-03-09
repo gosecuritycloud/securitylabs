@@ -1,58 +1,45 @@
-# Laboratorio: Descubrimiento de ID de Cuenta AWS a través de Aplicación Web
+# AWS Pentesting Labs: Acceso Inicial
 
-Este laboratorio demuestra cómo un atacante puede descubrir el ID de una cuenta de AWS aprovechando configuraciones inseguras en una aplicación web expuesta públicamente.
+¡Bienvenido a la serie de laboratorios de pentesting en AWS! Este repositorio está diseñado para simular los pasos iniciales que un pentester podría tomar al obtener acceso a una cuenta de AWS. A través de estos 10 laboratorios, exploraremos diversas técnicas y herramientas para identificar y explotar configuraciones inseguras.
 
-## Descripción General
+## Índice de Laboratorios
 
-El objetivo principal es simular un escenario donde un atacante, mediante el reconocimiento de puertos y la identificación de buckets S3 públicos con información sensible, puede obtener el ID de la cuenta AWS objetivo y potencialmente acceder a snapshots de EBS o RDS públicos con credenciales incrustadas.
+1.  **[Descubrimiento de ID de Cuenta a través de Aplicación Web](lab1-account-id-discovery/README.md)**:
+    * Explotación de configuraciones inseguras en aplicaciones web y buckets S3 públicos para obtener el ID de la cuenta.
+2.  **[Enumeración de Usuarios IAM](lab2-iam-enumeration/README.md)**:
+    * Técnicas para enumerar usuarios y roles de IAM y comprender la estructura de permisos.
+3.  **[Escalamiento de Privilegios con Roles IAM](lab3-iam-role-escalation/README.md)**:
+    * Explotación de roles IAM con permisos excesivos para escalar privilegios.
+4.  **[Acceso a Snapshots Públicos de EBS y RDS](lab4-public-snapshots/README.md)**:
+    * Búsqueda y análisis de snapshots públicos en busca de credenciales y datos sensibles.
+5.  **[Explotación de Buckets S3 Inseguros](lab5-s3-exploitation/README.md)**:
+    * Técnicas para identificar y explotar buckets S3 con configuraciones de acceso inseguras.
+6.  **[Acceso a Instancias EC2 a través de Metadatos](lab6-ec2-metadata/README.md)**:
+    * Ataques a instancias EC2 para acceder a metadatos y obtener credenciales temporales.
+7.  **[Manipulación de Funciones Lambda](lab7-lambda-exploitation/README.md)**:
+    * Identificación y explotación de vulnerabilidades en funciones Lambda.
+8.  **[Ataques a API Gateway](lab8-api-gateway-attacks/README.md)**:
+    * Técnicas de pentesting para API Gateway, incluyendo ataques de inyección y autenticación.
+9.  **[Análisis de Logs de CloudTrail](lab9-cloudtrail-analysis/README.md)**:
+    * Análisis de registros de CloudTrail para identificar actividades sospechosas y patrones de ataque.
+10. **[Ataques a Contenedores ECR y ECS](lab10-container-attacks/README.md)**:
+    * Explotación de vulnerabilidades en contenedores ECR y ECS.
 
-## Requisitos Previos
+## Requisitos Generales
 
-* Una cuenta de AWS con credenciales de CLI configuradas.
-* `nmap` instalado en tu sistema.
-* Conocimientos básicos de AWS CLI y servicios como S3, EC2, EBS y RDS.
+* Cuenta de AWS para fines de prueba.
+* AWS CLI configurado.
+* Conocimientos básicos de seguridad en la nube y pentesting.
+* Las herramientas necesarias para cada laboratorio serán especificadas en su respectivo README.md.
 
-## Pasos
+## Consideraciones Importantes
 
-1.  **Reconocimiento de Puertos con Nmap**:
-    * Ejecuta `nmap` contra la aplicación web para identificar puertos abiertos y servicios expuestos.
-    * Ejemplo: `nmap -sV <dirección_IP_o_dominio>`
-
-2.  **Identificación de Buckets S3 Públicos**:
-    * Busca buckets S3 que puedan contener información sensible o estática de la aplicación.
-    * Presta especial atención a archivos como `.pem` (claves privadas) o archivos de configuración.
-    * Verifica si el acceso a estos buckets es público.
-
-3.  **Configuración de Roles en la Cuenta del Atacante**:
-    * En la cuenta AWS del atacante, configura un rol IAM que permita asumir privilegios suficientes para utilizar herramientas como `s3-account-id-discovery`.
-    * Alternativamente, puedes ejecutar la herramienta en una instancia EC2 con un rol IAM preconfigurado.
-
-4.  **Descubrimiento del ID de la Cuenta AWS**:
-    * Utiliza una herramienta como `s3-account-id-discovery` para identificar el ID de la cuenta AWS objetivo a través de los buckets S3 públicos.
-
-5.  **Búsqueda de Snapshots Públicos de EBS y RDS**:
-    * Utiliza la AWS CLI para buscar snapshots públicos de EBS y RDS pertenecientes al ID de la cuenta objetivo.
-    * Comando de ejemplo:
-        ```bash
-        aws ec2 describe-snapshots --owner-ids <ID_de_la_cuenta> --filters Name=public,Values=true
-        aws rds describe-db-snapshots --include-public --db-snapshot-identifier <ID_de_la_cuenta>
-        ```
-
-6.  **Análisis de Snapshots**:
-    * Si se encuentran snapshots públicos, analízalos en busca de posibles credenciales de AWS o información sensible.
-
-## Herramientas Recomendadas
-
-* `nmap`: Para reconocimiento de puertos y servicios.
-* `awscli`: Para interactuar con los servicios de AWS desde la línea de comandos.
-* `s3-account-id-discovery`: Herramienta para descubrir el ID de una cuenta AWS a través de buckets S3 públicos.
-
-## Consideraciones de Seguridad
-
-* Este laboratorio se realiza con fines educativos y de seguridad.
-* No realices estas actividades en sistemas o cuentas que no te pertenezcan sin autorización.
-* Asegura siempre la configuración de tus buckets S3 y snapshots para evitar la exposición de información sensible.
+* Estos laboratorios deben ser realizados en entornos de prueba propios.
+* No realices pentesting en cuentas de AWS sin autorización.
+* Siempre cumple con las políticas de AWS y las leyes aplicables.
 
 ## Contribución
 
-Las contribuciones son bienvenidas. Si tienes sugerencias o mejoras, por favor, abre un issue o envía un pull request.
+Si tienes sugerencias, mejoras o quieres contribuir con nuevos laboratorios, ¡eres bienvenido! Abre un issue o envía un pull request.
+
+¡Disfruta aprendiendo y mejorando tus habilidades de pentesting en AWS!
