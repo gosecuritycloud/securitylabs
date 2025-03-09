@@ -1,0 +1,44 @@
+name: S3 Bucket Management
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Create or Destroy'
+        required: true
+        type: choice
+        options:
+          - create
+          - destroy
+
+jobs:
+  manage_bucket:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_INICIAL_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }} # Usa la región del secreto o us-east-1 por defecto
+
+      - name: Create Random ID
+        id: random-id
+        run: echo "BUCKET_ID=$(date +%s%N | sha256sum | head -c 32)" >> $GITHUB_OUTPUT
+
+      - name: Create S3 Bucket
+        if: ${{ github.event.inputs.action == 'create' }}
+        run: |
+          aws s3api create-bucket --bucket gosecurity-tfstate-${{ steps.random-id.outputs.BUCKET_ID }} --region ${{ secrets.AWS_REGION || 'us-east-1' }}
+
+      - name: Destroy S3 Bucket (force delete)
+        if: ${{ github.event.inputs.action == 'destroy' }}
+        run: |
+          aws s3 rm "s3://pentesting-lab-bucket-${{ steps.random-id.outputs.BUCKET_ID }}" --recursive --force
+          aws s3api delete-bucket --bucket pentesting-lab-bucket-${{ steps.random-id.outputs.BUCKET_ID }} --region ${{ secrets.AWS_REGION || 'us-east-1' }}
