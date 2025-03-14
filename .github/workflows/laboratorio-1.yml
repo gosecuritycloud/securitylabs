@@ -1,0 +1,41 @@
+name: Terraform Apply en Pull Request (Laboratorio-1 -> main)
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - main
+    paths:
+      - 'ejercicios/lab-1/**'
+
+jobs:
+  terraform_apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    if: startsWith(github.head_ref, 'Laboratorio-1-')
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v2
+
+      - name: Configurar Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: latest
+
+      - name: Configurar AWS Credentials con OIDC
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::<ID de tu cuenta>:role/<Nombre de tu rol>
+          aws-region: <Tu región de AWS>
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ejercicios/lab-1/
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ejercicios/lab-1/
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ejercicios/lab-1/

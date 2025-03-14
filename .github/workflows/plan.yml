@@ -1,0 +1,16 @@
+name: Terraform Plan
+
+on:
+  pull_request:
+
+env:
+  TF_SA: github-deployments@sam-gallagher-tutorials-001.iam.gserviceaccount.com
+  TERRAFORM_VERSION: "1.2.9"
+  TF_IN_AUTOMATION: "True"
+
+jobs:
+  terraform_plan:
+    runs-on: ubuntu-latest
+    if: github.event.review.state != 'approved'
+    steps:
+      - uses: actions/checkout@v3

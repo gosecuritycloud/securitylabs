@@ -1,4 +1,4 @@
 # securitylabs
 
 
-[Laboratorio 1: Acceso inicial](Acceso inicial/Laboratorio-1/)
+[Fase 1: Acceso inicial](fase-1-acceso-inicial/Laboratorio-1/)
